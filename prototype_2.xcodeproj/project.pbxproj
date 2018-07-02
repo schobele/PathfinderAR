@@ -7,14 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B33BE00920E2DB3C0003510E /* NavigationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33BE00820E2DB3C0003510E /* NavigationService.swift */; };
+		B33BE00B20E2E3730003510E /* LocationServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33BE00A20E2E3730003510E /* LocationServiceDelegate.swift */; };
+		B38A3B4220E503AB0030D865 /* ArrowNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38A3B4120E503AB0030D865 /* ArrowNode.swift */; };
+		B38A3B4620E514840030D865 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = B38A3B4520E514840030D865 /* art.scnassets */; };
 		B3B6E33D209B3CD00099E17D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B6E33C209B3CD00099E17D /* AppDelegate.swift */; };
 		B3B6E33F209B3CD00099E17D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B6E33E209B3CD00099E17D /* ViewController.swift */; };
 		B3B6E342209B3CD00099E17D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3B6E340209B3CD00099E17D /* Main.storyboard */; };
 		B3B6E344209B3CD20099E17D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3B6E343209B3CD20099E17D /* Assets.xcassets */; };
 		B3B6E347209B3CD20099E17D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B3B6E345209B3CD20099E17D /* LaunchScreen.storyboard */; };
+		B3B6E34F209B41A20099E17D /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B6E34E209B41A20099E17D /* Helper.swift */; };
+		B3B8427C20E3BBD20077EDD8 /* SceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B8427B20E3BBD20077EDD8 /* SceneController.swift */; };
+		B3B8427E20E3BC820077EDD8 /* WayPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B8427D20E3BC820077EDD8 /* WayPoint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B33BE00820E2DB3C0003510E /* NavigationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationService.swift; sourceTree = "<group>"; };
+		B33BE00A20E2E3730003510E /* LocationServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceDelegate.swift; sourceTree = "<group>"; };
+		B38A3B4120E503AB0030D865 /* ArrowNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowNode.swift; sourceTree = "<group>"; };
+		B38A3B4520E514840030D865 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		B3B6E339209B3CD00099E17D /* prototype_2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = prototype_2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3B6E33C209B3CD00099E17D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B3B6E33E209B3CD00099E17D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +33,9 @@
 		B3B6E343209B3CD20099E17D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B3B6E346209B3CD20099E17D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B3B6E348209B3CD20099E17D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B3B6E34E209B41A20099E17D /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		B3B8427B20E3BBD20077EDD8 /* SceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneController.swift; sourceTree = "<group>"; };
+		B3B8427D20E3BC820077EDD8 /* WayPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WayPoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,12 +68,19 @@
 		B3B6E33B209B3CD00099E17D /* prototype_2 */ = {
 			isa = PBXGroup;
 			children = (
+				B38A3B4520E514840030D865 /* art.scnassets */,
 				B3B6E33C209B3CD00099E17D /* AppDelegate.swift */,
 				B3B6E33E209B3CD00099E17D /* ViewController.swift */,
 				B3B6E340209B3CD00099E17D /* Main.storyboard */,
 				B3B6E343209B3CD20099E17D /* Assets.xcassets */,
 				B3B6E345209B3CD20099E17D /* LaunchScreen.storyboard */,
 				B3B6E348209B3CD20099E17D /* Info.plist */,
+				B3B6E34E209B41A20099E17D /* Helper.swift */,
+				B33BE00820E2DB3C0003510E /* NavigationService.swift */,
+				B33BE00A20E2E3730003510E /* LocationServiceDelegate.swift */,
+				B3B8427B20E3BBD20077EDD8 /* SceneController.swift */,
+				B3B8427D20E3BC820077EDD8 /* WayPoint.swift */,
+				B38A3B4120E503AB0030D865 /* ArrowNode.swift */,
 			);
 			path = prototype_2;
 			sourceTree = "<group>";
@@ -122,6 +143,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B38A3B4620E514840030D865 /* art.scnassets in Resources */,
 				B3B6E347209B3CD20099E17D /* LaunchScreen.storyboard in Resources */,
 				B3B6E344209B3CD20099E17D /* Assets.xcassets in Resources */,
 				B3B6E342209B3CD00099E17D /* Main.storyboard in Resources */,
@@ -136,7 +158,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3B6E33F209B3CD00099E17D /* ViewController.swift in Sources */,
+				B3B8427E20E3BC820077EDD8 /* WayPoint.swift in Sources */,
+				B33BE00B20E2E3730003510E /* LocationServiceDelegate.swift in Sources */,
+				B38A3B4220E503AB0030D865 /* ArrowNode.swift in Sources */,
+				B3B8427C20E3BBD20077EDD8 /* SceneController.swift in Sources */,
 				B3B6E33D209B3CD00099E17D /* AppDelegate.swift in Sources */,
+				B3B6E34F209B41A20099E17D /* Helper.swift in Sources */,
+				B33BE00920E2DB3C0003510E /* NavigationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,6 +309,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37623J6K2T;
 				INFOPLIST_FILE = prototype_2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -298,6 +327,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 37623J6K2T;
 				INFOPLIST_FILE = prototype_2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
