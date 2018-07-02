@@ -97,7 +97,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     waypoints.popLast()
                 }
                 
-                if(isInRightDirection(waypoints?.last)){
+                if(isInRightDirection(toPoint: waypoints.last!)){
                     AudioServicesPlaySystemSound(1103);
                 }else{
                     AudioServicesPlaySystemSound(1155);
@@ -137,7 +137,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 smallerPointOfView?.position = pointOfView.position
                 smallerPointOfView?.rotation = pointOfView.rotation
                 smallerPointOfView?.camera = pointOfView.camera
-                smallerPointOfView?.position.z = (smallerPointOfView?.position.z)! - (distanceBetweenPoints(A: toPoint, B: position)*1)
+                smallerPointOfView?.position.z = Float((smallerPointOfView?.position.z)!) - Float(distanceBetweenPoints(A: toPoint.position, B: position)*0.5)
                 Helper.addChildNode(smallerPointOfView!, toNode: sceneView.scene.rootNode, inView: sceneView, cameraRelativePosition: cameraPosition)
                 
                 isMaybeVisible = sceneView.isNode((waypoints.last)!, insideFrustumOf: smallerPointOfView!)
