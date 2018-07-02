@@ -24,8 +24,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     var sceneController = HoverScene()
     var didInitializeScene: Bool = false
-    var spheres: [SCNNode] = []
+    var waypoints: [WayPoint] = []
     var arrowNode: ArrowNode?
+    var smallerPointOfView: SCNNode?
     
     lazy var trackingInfoLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: 20, y: 40, width: 300, height: 60))
@@ -53,7 +54,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @objc func clearNodes(sender: UIButton!) {
       
-        if(arrowNode == nil && spheres.count >= 1){
+        if(arrowNode == nil && waypoints.count >= 1){
             let arrow = ArrowNode()
             Helper.addChildNode(arrow, toNode: sceneView.scene.rootNode, inView: sceneView, cameraRelativePosition: cameraPosition)
             arrowNode = arrow
@@ -66,6 +67,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         print(currentTransform)
     }
     
+    func getPositionAndOrientationOf(_ node: SCNNode, relativeTo referenceNode: SCNNode) {
+        let referenceNodeTransform = matrix_float4x4(referenceNode.transform)
+        
+        // Setup a translation matrix with the desired position
+        var translationMatrix = matrix_identity_float4x4
+        translationMatrix.columns.3.x = 0
+        translationMatrix.columns.3.y = 0
+        translationMatrix.columns.3.z = 0
+        
+        // Combine the configured translation matrix with the referenceNode's transform to get the desired position AND orientation
+        let updatedTransform = matrix_multiply(referenceNodeTransform, translationMatrix)
+        let transform = SCNMatrix4(updatedTransform)
+        print(transform)
+    }
+    
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         if let camera = sceneView.session.currentFrame?.camera {
@@ -74,18 +90,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let position = SCNVector3(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
             var waypointInfoLabelText = "No waypoints found";
             
-            if(spheres.count >= 1){
-                let distanceToNext = distanceBetweenPoints(A: position, B: (spheres.last?.position)!)
+            if(waypoints.count >= 1){
+                let distanceToNext = distanceBetweenPoints(A: position, B: (waypoints.last?.position)!)
                 if(distanceToNext < 0.1) {
-                    spheres.last?.removeFromParentNode()
-                    spheres.popLast()
-                    spheres.last?.opacity = 1
+                    waypoints.last?.reached()
+                    waypoints.popLast()
                 }
                 
-                if(arrowNode != nil && spheres.count >= 1){
+                if(isInRightDirection(waypoints?.last)){
+                    AudioServicesPlaySystemSound(1103);
+                }else{
+                    AudioServicesPlaySystemSound(1155);
+                }
+                
+                if(arrowNode != nil && waypoints.count >= 1){
                     arrowNode?.position = SCNVector3(position.x,position.y, (position.z-0.5))
                     Helper.transformArrowPosition(node: arrowNode!, inView: sceneView, cameraRelativePosition: cameraPosition)
-                    arrowNode?.pointAt(position: (spheres.last?.position)!)
+                    arrowNode?.pointAt(position: (waypoints.last?.position)!)
                     waypointInfoLabelText = "Next Waypoint in \(String(format: "%.2f", distanceToNext)) m"
                 }else if(arrowNode != nil){
                     arrowNode?.removeFromParentNode()
@@ -96,19 +117,41 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 DispatchQueue.main.async {
                     self.waypointInfoLabel.text = waypointInfoLabelText
                 }
+                
             }
             
         }
     }
     
-  
+    func isInRightDirection(toPoint: SCNNode) -> Bool {
+        var isMaybeVisible = false
+        if var pointOfView: SCNNode = sceneView.pointOfView {
+            if(smallerPointOfView != nil){
+                smallerPointOfView?.removeFromParentNode()
+            }
+            if let camera = sceneView.session.currentFrame?.camera {
+                let transform = camera.transform
+                let position = SCNVector3(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+            
+                smallerPointOfView = SCNNode()
+                smallerPointOfView?.position = pointOfView.position
+                smallerPointOfView?.rotation = pointOfView.rotation
+                smallerPointOfView?.camera = pointOfView.camera
+                smallerPointOfView?.position.z = (smallerPointOfView?.position.z)! - (distanceBetweenPoints(A: toPoint, B: position)*1)
+                Helper.addChildNode(smallerPointOfView!, toNode: sceneView.scene.rootNode, inView: sceneView, cameraRelativePosition: cameraPosition)
+                
+                isMaybeVisible = sceneView.isNode((waypoints.last)!, insideFrustumOf: smallerPointOfView!)
+            }
+        }
+        return isMaybeVisible
+    }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(sceneView)
-        view.addSubview(infoLabel)
-        view.addSubview(nodeInfoLabel)
+        view.addSubview(trackingInfoLabel)
+        view.addSubview(waypointInfoLabel)
         view.addSubview(nodeClearBtn)
 
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
@@ -131,13 +174,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
         
-        let sphere = randomSphere()
-        addLightNodeTo(sphere)
-        Helper.addChildNode(sphere, toNode: sceneView.scene.rootNode, inView: sceneView, cameraRelativePosition: cameraPosition)
-        spheres.append(sphere)
-        for sphere in spheres {
-            print(distanceBetweenPoints(A: sphere.position, B: cameraPosition))
-        }
+        let wp = WayPoint()
+        addLightNodeTo(wp)
+        Helper.addChildNode(wp, toNode: sceneView.scene.rootNode, inView: sceneView, cameraRelativePosition: cameraPosition)
+        waypoints.append(wp)
         
     }
     

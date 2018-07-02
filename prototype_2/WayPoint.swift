@@ -9,41 +9,32 @@
 
 import Foundation
 import SceneKit
+import AVFoundation
 
 class WayPoint: SCNNode {
     
-    init(from file: String) {
+    override init() {
         super.init()
+        self.geometry = SCNSphere(radius: 0.01)
+        self.geometry?.firstMaterial?.diffuse.contents = UIColor.green
         
-        let nodesInFile = allNodes(from: file)
-        nodesInFile.forEach { (node) in
-            self.addChildNode(node)
-        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func allNodes(from file: String) -> [SCNNode] {
-        var nodesInFile = [SCNNode]()
-        
-        do {
-            guard let sceneURL = Bundle.main.url(forResource: file, withExtension: nil) else {
-                print("Could not find scene file \(file)")
-                return nodesInFile
-            }
-            
-            let objScene = try SCNScene(url: sceneURL as URL, options: [SCNSceneSource.LoadingOption.animationImportPolicy:SCNSceneSource.AnimationImportPolicy.doNotPlay])
-            
-            for childNode in objScene.rootNode.childNodes {
-                nodesInFile.append(childNode)
-            }
-        } catch {
-            
-        }
-        
-        return nodesInFile
+    func show() {
+        self.opacity = 1
+    }
+    
+    func hide() {
+        self.opacity = 0.05
+    }
+    
+    func reached() {
+        self.hide()
+        AudioServicesPlaySystemSound(1103);
     }
     
 }
