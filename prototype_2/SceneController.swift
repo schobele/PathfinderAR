@@ -44,13 +44,6 @@ struct HoverScene {
         scene.rootNode.addChildNode(directionalNode)
     }
     
-    func addSphere(position: SCNVector3) {
-        guard let scene = self.scene else { return }
-        
-        /*let wp = WayPoint()
-        wp.position = position
-        scene.rootNode.addChildNode(wp)*/
-    }
     
     // Timing function that has a "bounce in" effect
     func easeOutElastic(_ t: Float) -> Float {
@@ -59,12 +52,4 @@ struct HoverScene {
         return result
     }
     
-    func makeUpdateCameraPos(towards: SCNVector3) {
-        guard let scene = self.scene else { return }
-        /*scene.rootNode.enumerateChildNodes({ (node, _) in
-            if let wp = node.topmost(until: scene.rootNode) as? Sphere {
-                sphere.patrol(targetPos: towards)
-            }
-        })*/
-    }
 }

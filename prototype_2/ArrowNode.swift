@@ -8,6 +8,7 @@
 
 import Foundation
 import SceneKit
+import ARKit
 
 class SceneObject: SCNNode {
     
@@ -46,4 +47,21 @@ class ArrowNode: SceneObject {
         SCNTransaction.commit()
         
     }
+    
+    func destroy() {
+        self.removeFromParentNode()
+    }
+    
+    func transformPosition(node: SCNNode, inView: ARSCNView, cameraRelativePosition: SCNVector3) {
+        guard let currentFrame = inView.session.currentFrame else { return }
+        let camera = currentFrame.camera
+        let transform = camera.transform
+        var translationMatrix = matrix_identity_float4x4
+        translationMatrix.columns.3.x = (cameraRelativePosition.x + 0.06)
+        translationMatrix.columns.3.y = (cameraRelativePosition.y)
+        translationMatrix.columns.3.z = (cameraRelativePosition.z - 0.03)
+        let modifiedMatrix = simd_mul(transform, translationMatrix)
+        node.simdTransform = modifiedMatrix
+    }
+    
 }

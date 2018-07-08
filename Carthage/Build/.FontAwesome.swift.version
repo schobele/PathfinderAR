@@ -1,0 +1,9 @@
+{
+  "commitish" : "1.3.2",
+  "iOS" : [
+    {
+      "name" : "FontAwesome",
+      "hash" : "4e109187bbda0ed75e87b92d3a2c5d4885795f81303ab69767421b37adebd2a8"
+    }
+  ]
+}

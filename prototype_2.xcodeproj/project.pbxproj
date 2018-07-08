@@ -19,6 +19,7 @@
 		B3B6E34F209B41A20099E17D /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B6E34E209B41A20099E17D /* Helper.swift */; };
 		B3B8427C20E3BBD20077EDD8 /* SceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B8427B20E3BBD20077EDD8 /* SceneController.swift */; };
 		B3B8427E20E3BC820077EDD8 /* WayPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B8427D20E3BC820077EDD8 /* WayPoint.swift */; };
+		B3DD3FF020ED22B80044B2FB /* FontAwesome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B3DD3FEF20ED22B80044B2FB /* FontAwesome.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		B3B6E34E209B41A20099E17D /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		B3B8427B20E3BBD20077EDD8 /* SceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneController.swift; sourceTree = "<group>"; };
 		B3B8427D20E3BC820077EDD8 /* WayPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WayPoint.swift; sourceTree = "<group>"; };
+		B3DD3FEF20ED22B80044B2FB /* FontAwesome.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FontAwesome.framework; path = Carthage/Build/iOS/FontAwesome.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3DD3FF020ED22B80044B2FB /* FontAwesome.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +57,7 @@
 			children = (
 				B3B6E33B209B3CD00099E17D /* prototype_2 */,
 				B3B6E33A209B3CD00099E17D /* Products */,
+				B3DD3FE520ED21450044B2FB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -85,6 +89,14 @@
 			path = prototype_2;
 			sourceTree = "<group>";
 		};
+		B3DD3FE520ED21450044B2FB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B3DD3FEF20ED22B80044B2FB /* FontAwesome.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -95,6 +107,7 @@
 				B3B6E335209B3CD00099E17D /* Sources */,
 				B3B6E336209B3CD00099E17D /* Frameworks */,
 				B3B6E337209B3CD00099E17D /* Resources */,
+				B3DD3FF120ED234A0044B2FB /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -151,6 +164,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B3DD3FF120ED234A0044B2FB /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/FontAwesome.framework",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Fontawesome.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B3B6E335209B3CD00099E17D /* Sources */ = {
@@ -307,9 +338,15 @@
 		B3B6E34C209B3CD20099E17D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 37623J6K2T;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/prototype_2",
+				);
 				INFOPLIST_FILE = prototype_2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -325,9 +362,15 @@
 		B3B6E34D209B3CD20099E17D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 37623J6K2T;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/prototype_2",
+				);
 				INFOPLIST_FILE = prototype_2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

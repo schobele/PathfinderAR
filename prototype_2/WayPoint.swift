@@ -10,14 +10,24 @@
 import Foundation
 import SceneKit
 import AVFoundation
+import ARKit
 
-class WayPoint: SCNNode {
+class WayPoint: NSObject {
+    var isSelected: Bool = false
+    var number: Int
+    var isOpen: Bool = true
+    var node: SCNNode!
+    var arAnchor: ARAnchor?
     
-    override init() {
-        super.init()
-        self.geometry = SCNSphere(radius: 0.01)
-        self.geometry?.firstMaterial?.diffuse.contents = UIColor.green
-        
+    init(nr: Int, node: SCNNode) {
+        self.node = node
+        self.node.geometry = SCNSphere(radius: 0.04)
+        self.node.geometry?.firstMaterial?.diffuse.contents = UIColor.init(named: "mGreen")
+        self.node.geometry?.firstMaterial?.lightingModel = .physicallyBased
+        self.node.geometry?.firstMaterial?.metalness.contents = 0.3
+        self.node.geometry?.firstMaterial?.reflective.contents = 0.8
+        self.node.geometry?.firstMaterial?.roughness.contents = 0.715
+        self.number = nr
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -25,17 +35,46 @@ class WayPoint: SCNNode {
     }
     
     func show() {
-        self.opacity = 1
+        self.node.opacity = 1
     }
     
     func hide() {
-        self.opacity = 0.05
+        self.node.opacity = 0
+    }
+    
+    func setOpen() {
+        self.node.geometry?.firstMaterial?.diffuse.contents = UIColor.init(named: "mGreen")
+        self.node.opacity = 1
+        self.isOpen = true
     }
     
     func reached() {
-        self.hide()
+        self.node.geometry?.firstMaterial?.diffuse.contents = UIColor.init(named: "mBlue")
+        self.node.opacity = 0.35
+        self.isOpen = false
         AudioServicesPlaySystemSound(1103);
     }
+    
+    func select() {
+        self.isSelected = true
+        self.node.geometry?.firstMaterial?.diffuse.contents = UIColor.init(named: "mBlue")
+    }
+    
+    func unSelect() {
+        self.isSelected = false
+        self.node.geometry?.firstMaterial?.diffuse.contents = UIColor.init(named: "mGreen")
+    }
+    
+    func getDistanceTo(position: SCNVector3) -> CGFloat {
+        let mPosition = self.node.position
+        let d = sqrt(
+            (mPosition.x - position.x) * (mPosition.x - position.x)
+                + (mPosition.y - position.y) * (mPosition.y - position.y)
+                + (mPosition.z - position.z) * (mPosition.z - position.z)
+        )
+        return CGFloat(d)
+    }
+    
     
 }
 

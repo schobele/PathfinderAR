@@ -23,19 +23,7 @@ class Helper: NSObject {
         node.simdTransform = modifiedMatrix
         toNode.addChildNode(node)
     }
-    
-    static func transformArrowPosition(node: SCNNode, inView: ARSCNView, cameraRelativePosition: SCNVector3) {
-        guard let currentFrame = inView.session.currentFrame else { return }
-        let camera = currentFrame.camera
-        let transform = camera.transform
-        var translationMatrix = matrix_identity_float4x4
-        translationMatrix.columns.3.x = (cameraRelativePosition.x + 0.06)
-        translationMatrix.columns.3.y = (cameraRelativePosition.y)
-        translationMatrix.columns.3.z = (cameraRelativePosition.z - 0.03)
-        let modifiedMatrix = simd_mul(transform, translationMatrix)
-        node.simdTransform = modifiedMatrix
-        
-    }
+
     
     static func distance3(fromStartingPositionNode: SCNNode?, onView: ARSCNView, cameraRelativePosition: SCNVector3) -> SCNVector3? {
         guard let startingPosition = fromStartingPositionNode else { return nil }
