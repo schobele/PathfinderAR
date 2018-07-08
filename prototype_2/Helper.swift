@@ -44,4 +44,16 @@ class Helper: NSObject {
     static func distance(x: Float, y: Float, z: Float) -> Float {
         return (sqrtf(x*x + y*y + z*z))
     }
+    
+    static func lockPortrait(_ orientation: UIInterfaceOrientationMask) {
+        if let delegate = UIApplication.shared.delegate as? AppDelegate {
+            delegate.orientationLock = orientation
+        }
+    }
+    
+    static func lockPortrait(_ orientation: UIInterfaceOrientationMask, andRotateTo rotateOrientation:UIInterfaceOrientation) {
+        self.lockPortrait(orientation)
+        UIDevice.current.setValue(rotateOrientation.rawValue, forKey: "orientation")
+    }
 }
+

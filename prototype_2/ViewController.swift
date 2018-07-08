@@ -31,7 +31,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var selectedWaypoint: WayPoint?
     var navigationMode: Bool = false
     var spotLight: SCNNode = SCNNode()
-
+    var showMenu: Bool = true
+    
+    lazy var toggleMenuBtn: UIButton = {
+        let btn = UIButton(frame: CGRect(x: view.frame.width-180, y:40 , width: 190, height: 60))
+        btn.backgroundColor = UIColor.init(named: "mDarkTransp")
+        btn.addTarget(self, action: #selector(toggleMenu), for: .touchUpInside)
+        btn.layer.cornerRadius = 10.0
+        btn.contentHorizontalAlignment = .left
+        btn.clipsToBounds = true
+        btn.titleLabel?.font = UIFont.fontAwesome(ofSize: 20)
+        btn.setTitle("   \(String.fontAwesomeIcon(name: .bars))  Hide Menu", for: .normal)
+        btn.setTitle("   \(String.fontAwesomeIcon(name: .bars))", for: .selected)
+        return btn
+    }()
     
     lazy var trackingInfoLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: view.frame.width-280, y:(view.frame.height/2)-120 , width: 290, height: 60))
@@ -182,6 +195,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
     
+    
     @objc func clearWaypoints(sender: UIButton!) {
         if(waypoints.count >= 1){
             for waypoint in waypoints {
@@ -193,6 +207,26 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             unselectWaypoint(waypoint: selectedWaypoint)
         }
         setRouteInfoText()
+    }
+    
+    
+    @objc func toggleMenu(sender: UIButton!) {
+        showMenu = !showMenu
+        if(showMenu){
+            for v in view.subviews {
+                print(v)
+                if(v.frame.width == 290){
+                    v.frame.origin.x = view.frame.width - 280
+                }
+            }
+        }else{
+            for v in view.subviews {
+                print(v)
+                if(v.frame.width == 290){
+                    v.frame.origin.x = view.frame.width
+                }
+            }
+        }
     }
     
     @objc func toggleSound(sender: UIButton!) {
@@ -385,9 +419,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return isMaybeVisible
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Helper.lockPortrait(.portrait, andRotateTo: .portrait)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+
         view.addSubview(sceneView)
         view.addSubview(trackingInfoLabel)
         view.addSubview(navigationInfoLabel)
@@ -396,6 +436,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         view.addSubview(toggleSoundBtn)
         view.addSubview(startRouteBtn)
         view.addSubview(routeInfoLabel)
+        view.addSubview(toggleMenuBtn)
         waypointInfoBox.addSubview(deleteWaypointBtn)
         waypointInfoBox.addSubview(waypointInfoLabel)
         view.addSubview(waypointInfoBox)
