@@ -49,8 +49,7 @@ class WayPoint: NSObject {
     }
     
     func reached() {
-        self.node.geometry?.firstMaterial?.diffuse.contents = UIColor.init(named: "mBlue")
-        self.node.opacity = 0.35
+        self.hide()
         self.isOpen = false
         AudioServicesPlaySystemSound(1103);
     }

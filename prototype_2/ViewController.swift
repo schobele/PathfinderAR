@@ -32,6 +32,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var navigationMode: Bool = false
     var spotLight: SCNNode = SCNNode()
 
+    
     lazy var trackingInfoLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: view.frame.width-280, y:(view.frame.height/2)-120 , width: 290, height: 60))
         label.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.title2)
@@ -43,8 +44,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return label
     }()
     
+    lazy var routeInfoLabel: UILabel = {
+        let label = UILabel(frame: CGRect(x: view.frame.width-280, y:(view.frame.height/2)-55 , width: 290, height: 60))
+        label.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.title2)
+        label.textAlignment = .left
+        label.layer.cornerRadius = 10.0
+        label.clipsToBounds = true
+        label.textColor = UIColor.white
+        label.backgroundColor = UIColor.init(named: "mDarkTransp")
+        return label
+    }()
+    
     lazy var deleteRouteBtn: UIButton = {
-        let btn = UIButton(frame: CGRect(x: view.frame.width-280, y:(view.frame.height/2)-55 , width: 290, height: 60))
+        let btn = UIButton(frame: CGRect(x: view.frame.width-280, y:(view.frame.height/2)+10 , width: 290, height: 60))
         btn.backgroundColor = UIColor.init(named: "mDarkTransp")
         btn.addTarget(self, action: #selector(clearWaypoints), for: .touchUpInside)
         btn.layer.cornerRadius = 10.0
@@ -56,7 +68,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }()
     
     lazy var startRouteBtn: UIButton = {
-        let btn = UIButton(frame: CGRect(x: view.frame.width-280, y:(view.frame.height/2)+10, width: 290, height: 60))
+        let btn = UIButton(frame: CGRect(x: view.frame.width-280, y:(view.frame.height/2)+75, width: 290, height: 60))
         btn.backgroundColor = UIColor.init(named: "mDarkTransp")
         btn.addTarget(self, action: #selector(toggleNavigationMode), for: .touchUpInside)
         btn.layer.cornerRadius = 10.0
@@ -70,7 +82,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }()
     
     lazy var waypointInfoBox: UIView = {
-        let view = UIView(frame: CGRect(x: self.view.frame.width-280, y:(self.view.frame.height/2)+115, width: 290, height: 120))
+        let view = UIView(frame: CGRect(x: self.view.frame.width-280, y:(self.view.frame.height/2)+180, width: 290, height: 120))
         view.layer.cornerRadius = 10.0
         view.clipsToBounds = true
         view.isHidden = true
@@ -101,15 +113,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }()
     
     lazy var toggleSoundBtn: UIButton = {
-        let btn = UIButton(frame: CGRect(x: view.frame.width-65, y: (view.frame.height/2)+10, width: 60, height: 60))
+        let btn = UIButton(frame: CGRect(x: view.frame.width-280, y: (view.frame.height/2)+75, width: 290, height: 60))
         btn.backgroundColor = UIColor.init(named: "mDarkTransp")
         btn.addTarget(self, action: #selector(toggleSound), for: .touchUpInside)
         btn.layer.cornerRadius = 10.0
         btn.clipsToBounds = true
         btn.isHidden = true
-        btn.titleLabel?.font = UIFont.fontAwesome(ofSize: 30)
-        btn.setTitle(String.fontAwesomeIcon(name: .volumeOff), for: .normal)
-        btn.setTitle(String.fontAwesomeIcon(name: .volumeUp), for: .selected)
+        btn.contentHorizontalAlignment = .left
+        btn.titleLabel?.font = UIFont.fontAwesome(ofSize: 20)
+        btn.setTitle("   \(String.fontAwesomeIcon(name: .volumeOff))  Sound Off", for: .normal)
+        btn.setTitle("   \(String.fontAwesomeIcon(name: .volumeUp))  Sound On", for: .selected)
         return btn
     }()
     
@@ -127,7 +140,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return btn
     }()
     
-    lazy var routeInfoLabel: UILabel = {
+    lazy var navigationInfoLabel: UILabel = {
         let label = UILabel(frame: CGRect(x: (self.view.frame.size.width-300)/2, y: self.view.frame.size.height-130, width: 300, height: 45))
         label.font = UIFont.preferredFont(forTextStyle: UIFontTextStyle.body)
         label.textAlignment = .center
@@ -179,6 +192,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             arrowNode = nil
             unselectWaypoint(waypoint: selectedWaypoint)
         }
+        setRouteInfoText()
     }
     
     @objc func toggleSound(sender: UIButton!) {
@@ -217,6 +231,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     waypointInfoBox.isHidden = true
                 }
             }
+            setRouteInfoText()
         }
     }
     
@@ -228,17 +243,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 wp.hide()
                 unselectWaypoint(waypoint: wp)
             }
+        
             addWaypointBtn.isEnabled = false
             addWaypointBtn.isHidden = true
             startRouteBtn.isSelected = true
             startRouteBtn.frame.origin = CGPoint(x: startRouteBtn.frame.origin.x, y: startRouteBtn.frame.origin.y-(startRouteBtn.frame.height+5))
-            routeInfoLabel.isHidden = false
+            navigationInfoLabel.isHidden = false
             toggleSoundBtn.isEnabled = true
             toggleSoundBtn.isHidden = false
             deleteRouteBtn.isHidden = true
             waypointInfoBox.isHidden = true
             addArrow()
             getOpenWaypoints().last?.show()
+            setRouteInfoText()
         }else{
             for wp in waypoints {
                 wp.setOpen()
@@ -247,7 +264,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             toggleSoundBtn.isEnabled = false
             addWaypointBtn.isEnabled = true
             startRouteBtn.isSelected = false
-            routeInfoLabel.isHidden = true
+            navigationInfoLabel.isHidden = true
             startRouteBtn.frame.origin = CGPoint(x: startRouteBtn.frame.origin.x, y: startRouteBtn.frame.origin.y+(startRouteBtn.frame.height+5))
             addWaypointBtn.isHidden = false
             toggleSoundBtn.isHidden = true
@@ -255,19 +272,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             waypointInfoBox.isHidden = true
             shouldPlaySound = false
             removeArrow()
+            setRouteInfoText()
         }
-    }
-    
-    func getPositionAndOrientationOf(_ node: SCNNode, relativeTo referenceNode: SCNNode) {
-        let referenceNodeTransform = matrix_float4x4(referenceNode.transform)
-        
-        var translationMatrix = matrix_identity_float4x4
-        translationMatrix.columns.3.x = 0
-        translationMatrix.columns.3.y = 0
-        translationMatrix.columns.3.z = 0
-        
-        let updatedTransform = matrix_multiply(referenceNodeTransform, translationMatrix)
-        let transform = SCNMatrix4(updatedTransform)
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
@@ -298,6 +304,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                 
                     if(distanceToNext < 0.2) {
+                        setRouteInfoText(plus: distanceToNext)
                         openWaypoints.last?.reached()
                     }
                     
@@ -305,11 +312,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     removeArrow()
                     if(waypoints.count >= 0){
                         waypointInfoLabelText = "Destination reached!"
+                        setRouteInfoText()
                     }
                 }
                 
                 DispatchQueue.main.async {
-                    self.routeInfoLabel.text = waypointInfoLabelText
+                    self.navigationInfoLabel.text = waypointInfoLabelText
                 }
             }
         }
@@ -319,6 +327,30 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let wp = WayPoint(nr: waypoints.count+1, node: node)
         wp.arAnchor = anchor
         waypoints.append(wp)
+        setRouteInfoText()
+        
+        
+    }
+    
+    func setRouteInfoText(plus: CGFloat? = 0){
+        DispatchQueue.main.async {
+            if(self.navigationMode){
+                self.routeInfoLabel.text = "   Distance left:  \(String(format: "%.2f", (self.getRouteDistanceFromWaypoints(waypoints: self.getOpenWaypoints())+plus!))) m"
+            }else{
+                self.routeInfoLabel.text = "   Route distance:  \(String(format: "%.2f", self.getRouteDistanceFromWaypoints(waypoints: self.waypoints))) m"
+            }
+        }
+    }
+    
+    func getRouteDistanceFromWaypoints(waypoints: [WayPoint]) -> CGFloat{
+        var routeDistance: CGFloat = 0.0
+        for (i, wp) in waypoints.enumerated() {
+            print(i)
+            if(i+1 < waypoints.count){
+                routeDistance += wp.getDistanceTo(position: waypoints[i+1].node.position)
+            }
+        }
+        return routeDistance
     }
     
     func getOpenWaypoints() -> [WayPoint] {
@@ -358,15 +390,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         super.viewDidLoad()
         view.addSubview(sceneView)
         view.addSubview(trackingInfoLabel)
-        view.addSubview(routeInfoLabel)
+        view.addSubview(navigationInfoLabel)
         view.addSubview(deleteRouteBtn)
         view.addSubview(addWaypointBtn)
         view.addSubview(toggleSoundBtn)
         view.addSubview(startRouteBtn)
+        view.addSubview(routeInfoLabel)
         waypointInfoBox.addSubview(deleteWaypointBtn)
         waypointInfoBox.addSubview(waypointInfoLabel)
         view.addSubview(waypointInfoBox)
-
+        setRouteInfoText()
+        
         spotLight.light = SCNLight()
         spotLight.scale = SCNVector3(1,1,1)
         spotLight.light?.intensity = 600
